@@ -10,7 +10,13 @@
     <a asp-action="Create" class="titulo">Agregar nuevo libro</a>
 </p>
 
-<table class="table" id="example">
+<style>
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #e0e0e0;
+    }
+</style>
+
+<table class="table table-striped" id="example">
     <thead>
         <tr>
             <th style="text-align: center;">
@@ -65,7 +71,7 @@
             <td style="text-align: center;">
                 @Html.DisplayFor(modelItem => item.NitEditorialNavigation.Nit)
             </td>
-            <td style="text-align: center;">
+            <td style="text-align: center;" class="no-export">
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.Isbn" style="margin-right: 5px;">Editar</a>
                     <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Isbn" style="margin-right: 5px;">Detalles</a>
@@ -89,32 +95,50 @@
                     {
                         extend: 'copy',
                         text: '<i class="fa-solid fa-copy"></i>',
-                        className: 'botonCopiar btn'
+                        className: 'botonCopiar btn',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6] // Excluye la última columna (índice 7)
+                        }
                     },
                     {
                         extend: 'csv',
                         text: '<i class="fa-solid fa-file-csv"></i>',
-                        className: 'botonCsv btn'
+                        className: 'botonCsv btn',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6] // Excluye la última columna (índice 7)
+                        }
                     },
                     {
                         extend: 'excel',
                         text: '<i class="fa-regular fa-file-excel"></i>',
-                        className: 'botonExcel btn'
+                        className: 'botonExcel btn',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6] // Excluye la última columna (índice 7)
+                        }
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="fa-solid fa-file-pdf"></i>',
-                        className: 'botonPdf btn'
+                        className: 'botonPdf btn',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6] // Excluye la última columna (índice 7)
+                        }
                     },
                     {
                         extend: 'print',
                         text: '<i class="fa-solid fa-print"></i>',
-                        className: 'botonPrint btn'
+                        className: 'botonPrint btn',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6] // Excluye la última columna (índice 7)
+                        }
                     },
                     {
                         extend: 'colvis',
                         text: 'Filtrar  ',
-                        className: 'botonColvis btn'
+                        className: 'botonColvis btn',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6] // Excluye la última columna (índice 7)
+                        }
                     }
                 ]
             }
