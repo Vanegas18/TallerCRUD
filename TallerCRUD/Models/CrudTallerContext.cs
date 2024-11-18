@@ -23,6 +23,8 @@ public partial class CrudTallerContext : DbContext
 
     public virtual DbSet<Libro> Libros { get; set; }
 
+    public virtual DbSet<Libro_autor> Libro_autores { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -48,26 +50,11 @@ public partial class CrudTallerContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
-            entity.HasMany(d => d.Isbns).WithMany(p => p.IdAutors)
-                .UsingEntity<Dictionary<string, object>>(
-                    "LibroAutor",
-                    r => r.HasOne<Libro>().WithMany()
-                        .HasForeignKey("Isbn")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Libro_auto__Isbn__2F10007B"),
-                    l => l.HasOne<Autor>().WithMany()
-                        .HasForeignKey("IdAutor")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Libro_auto__Isbn__2E1BDC42"),
-                    j =>
-                    {
-                        j.HasKey("IdAutor", "Isbn").HasName("PK__Libro_au__3443D5C1FD46625A");
-                        j.ToTable("Libro_autor");
-                        j.IndexerProperty<int>("IdAutor").HasColumnName("Id_autor");
-                        j.IndexerProperty<string>("Isbn")
-                            .HasMaxLength(20)
-                            .IsUnicode(false);
-                    });
+            entity.HasMany(d => d.Libro_autores)
+                .WithOne(p => p.IdAutorNavigation)
+                .HasForeignKey(d => d.IdAutor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Libro_auto__Id_a__2E1BDC42");
         });
 
         modelBuilder.Entity<Categoria>(entity =>
@@ -132,6 +119,33 @@ public partial class CrudTallerContext : DbContext
             entity.HasOne(d => d.NitEditorialNavigation).WithMany(p => p.Libros)
                 .HasForeignKey(d => d.NitEditorial)
                 .HasConstraintName("FK__Libros__Nit_edit__29572725");
+        });
+
+        modelBuilder.Entity<Libro_autor>(entity =>
+        {
+            entity.HasKey(e => new { e.IdAutor, e.Isbn })
+                  .HasName("PK__Libro_au__3443D5C1FD46625A");
+
+            entity.ToTable("Libro_autor");
+
+            entity.Property(e => e.IdAutor)
+                  .HasColumnName("Id_autor");
+
+            entity.Property(e => e.Isbn)
+                  .HasMaxLength(20)
+                  .IsUnicode(false);
+
+            entity.HasOne(d => d.IdAutorNavigation)
+                  .WithMany(p => p.Libro_autores)
+                  .HasForeignKey(d => d.IdAutor)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK__Libro_auto__Id_a__2E1BDC42");
+
+            entity.HasOne(d => d.IsbnLibroNavigation)
+                  .WithMany(p => p.Libro_autores)
+                  .HasForeignKey(d => d.Isbn)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK__Libro_auto__Isbn__2F10007B");
         });
 
         OnModelCreatingPartial(modelBuilder);

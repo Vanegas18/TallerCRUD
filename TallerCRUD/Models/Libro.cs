@@ -25,5 +25,6 @@ public partial class Libro
 
     public virtual Editoriale? NitEditorialNavigation { get; set; }
 
-    public virtual ICollection<Autor> IdAutors { get; set; } = new List<Autor>();
+    //public virtual ICollection<Autor> IdAutors { get; set; } = new List<Autor>();
+    public virtual ICollection<Libro_autor> Libro_autores { get; set; } = new List<Libro_autor>();
 }

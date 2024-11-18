@@ -1,0 +1,32 @@
+﻿@model TallerCRUD.Models.Libro_autor
+
+@{
+    ViewData["Title"] = "Detalles";
+}
+
+<h1>Detalles</h1>
+
+<div class="d-flex justify-content-center">
+    <div class="col-md-6">
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">
+                IdAutor
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IdAutorNavigation.IdAutor)
+            </dd>
+            <dt class="col-sm-3">
+                Isbn
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.IsbnLibroNavigation.Isbn)
+            </dd>
+        </dl>
+        <div class="form-group mt-4">
+            <a asp-action="Edit" asp-route-idAutor="@Model?.IdAutor" asp-route-isbn="@Model?.Isbn" class="btn btn-primary">Editar</a>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Volver a la lista</a>
+        </div>
+
+    </div>
+</div>
