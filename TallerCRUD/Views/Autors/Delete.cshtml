@@ -1,0 +1,52 @@
+﻿@model TallerCRUD.Models.Autor
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+
+<h1>Eliminar autor</h1>
+
+<div class="d-flex justify-content-center">
+    <div class="col-md-6">
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Apellido)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Apellido)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Nacionalidad)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nacionalidad)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="IdAutor" />
+            <div class="form-group mt-4">
+                <input type="submit" value="Eliminar" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary ml-2">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .btn-primary {
+        background-color: #ff5722;
+        border-color: #ff5722;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

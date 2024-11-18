@@ -1,0 +1,65 @@
+﻿@model TallerCRUD.Models.Editoriale
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+
+<h1>Eliminar editorial</h1>
+
+<div class="d-flex justify-content-center">
+    <div class="col-md-8">
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Nombres)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Nombres)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Telefono)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Telefono)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Direccion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Direccion)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Sitioweb)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Sitioweb)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Nit" />
+            <div class="form-group mt-4">
+                <input type="submit" value="Eliminar" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary ml-2">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .btn-primary {
+        background-color: #ff5722;
+        border-color: #ff5722;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

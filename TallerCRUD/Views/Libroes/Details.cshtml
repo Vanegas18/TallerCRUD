@@ -1,0 +1,72 @@
+﻿@model TallerCRUD.Models.Libro
+
+@{
+    ViewData["Title"] = "Detalles";
+}
+
+<h1>Detalles del libro</h1>
+
+<div class="d-flex justify-content-center">
+    <div class="col-md-8">
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Titulo)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Titulo)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.NombreAutor)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.NombreAutor)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Publicacion)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Publicacion)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.FechaRegistro)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.FechaRegistro)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.CodigoCategoriaNavigation)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.CodigoCategoriaNavigation.CodigoCategoria)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.NitEditorialNavigation)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.NitEditorialNavigation.Nit)
+            </dd>
+        </dl>
+        <div class="form-group mt-4">
+            <a asp-action="Edit" asp-route-id="@Model?.Isbn" class="btn btn-primary">Editar</a>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Volver a la lista</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-primary {
+        background-color: #ff5722;
+        border-color: #ff5722;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>

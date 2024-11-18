@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Pagina de inicio";
+}
+
+<div class="landing-page">
+    <div class="header text-center">
+        <h1 class="display-4">LIBRERIA</h1>
+        <p class="lead">Tu lugar favorito para encontrar los mejores libros</p>
+        <button class="btn btn-primary mt-3"><a class="nav-link text-white" asp-area="" asp-controller="Libroes" asp-action="Index">Explorar libros</a></button>
+    </div>
+    <div class="image-container text-center">
+        <img src="https://hips.hearstapps.com/hmg-prod/images/librerias-madrid-jpg-65bb94c9b4b6b.jpg" alt="Libreria Vanegas" class="img-fluid" />
+    </div>
+    <div class="features text-center">
+        <h2>Nuestras Características</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Variedad</h3>
+                <p>Amplia selección de libros de todos los géneros.</p>
+                <button class="btn btn-primary">Ver más</button>
+            </div>
+            <div class="col-md-4">
+                <h3>Calidad</h3>
+                <p>Libros en excelente estado y de las mejores editoriales.</p>
+                <button class="btn btn-primary">Ver más</button>
+            </div>
+            <div class="col-md-4">
+                <h3>Servicio</h3>
+                <p>Atención personalizada y recomendaciones a medida.</p>
+                <button class="btn btn-primary">Ver más</button>
+            </div>
+        </div>
+    </div>
+    <div class="testimonials text-center">
+        <h2>Testimonios</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p class="mb-0">"Una experiencia increíble, encontré todos los libros que buscaba."</p>
+                    <br />
+                    <footer class="blockquote-footer">Juan Pérez</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p class="mb-0">"El mejor servicio al cliente, muy recomendado."</p>
+                    <br />
+                    <footer class="blockquote-footer">María García</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p class="mb-0">"Gran variedad y calidad, volveré pronto."</p>
+                    <br />
+                    <footer class="blockquote-footer">Carlos López</footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .landing-page {
+        font-family: 'Helvetica Neue', sans-serif;
+        color: #333;
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    .header {
+        margin-top: 50px;
+    }
+
+        .header .btn-primary {
+            background-color: #ff5722;
+            border-color: #ff5722;
+        }
+
+            .header .btn-primary a {
+                color: #fff;
+                text-decoration: none;
+            }
+
+    .image-container {
+        margin: 30px 0;
+    }
+
+    .features {
+        margin: 50px 0;
+    }
+
+        .features .row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .features .col-md-4 {
+            margin: 20px;
+        }
+
+        .features .btn-primary {
+            background-color: #ff5722;
+            border-color: #ff5722;
+            margin-top: 10px;
+        }
+
+    .testimonials {
+        margin: 50px 0;
+    }
+
+        .testimonials .row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .testimonials .col-md-4 {
+            margin: 20px;
+        }
+
+    .blockquote {
+        background-color: #fff;
+        padding: 20px;
+        border-left: 5px solid #ff5722;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+</style>

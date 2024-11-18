@@ -1,0 +1,104 @@
+﻿@model IEnumerable<TallerCRUD.Models.Autor>
+
+@{
+    ViewData["Title"] = "Autores";
+}
+
+<h1>Autores</h1>
+
+<p class="btn btn-primary">
+    <a asp-action="Create" class="titulo">Crear nuevo autor</a>
+</p>
+<table class="table" id="example">
+    <thead>
+        <tr>
+            <th style="text-align: center;">
+                <a asp-action="Index" asp-route-filtro="@ViewData["FiltroNombre"]">
+                    Nombre
+                </a>
+            </th>
+            <th style="text-align: center;">
+                Apellido
+            </th>
+            <th style="text-align: center;">
+                Nacionalidad
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td style="text-align: center;">
+                @Html.DisplayFor(modelItem => item.Nacionalidad)
+            </td>
+            <td style="text-align: center;">
+                    <div class="btn-group" role="group">
+                        <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.IdAutor" style="margin-right: 5px;">Editar</a>
+                        <a asp-action="Details" class="btn btn-info" asp-route-id="@item.IdAutor" style="margin-right: 5px;">Detalles</a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.IdAutor" style="margin-right: 5px;">Eliminar</a>
+                    </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    new DataTable('#example', {
+        dom: '',
+        language: {
+            search: "Buscar:"
+        },
+        layout: {
+            topStart: {
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: '<i class="fa-solid fa-copy"></i>',
+                        className: 'botonCopiar btn'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="fa-solid fa-file-csv"></i>',
+                        className: 'botonCsv btn'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="fa-regular fa-file-excel"></i>',
+                        className: 'botonExcel btn'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="fa-solid fa-file-pdf"></i>',
+                        className: 'botonPdf btn'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa-solid fa-print"></i>',
+                        className: 'botonPrint btn'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: 'Filtrar  ',
+                        className: 'botonColvis btn'
+                    }
+                ]
+            }
+        },
+        scrollX: true,
+        initComplete: function(json, settings) {
+            $(".dt-buttons").removeClass("dt-buttons");
+            // agregar clase para añadir estilos
+            $(".dt-button").addClass("botones");
+            // Elimina la clase de los estilos por defecto de datatables
+            $(".dt-button").addClass("botones");
+        }
+    });
+</script>
