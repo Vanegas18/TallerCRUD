@@ -52,6 +52,8 @@ namespace TallerCRUD.Controllers
             }
 
             var libro = await _context.Libros
+                .Include(l => l.CodigoCategoriaNavigation)
+                .Include(l => l.NitEditorialNavigation)
                 .FirstOrDefaultAsync(m => m.Isbn == id);
             if (libro == null)
             {
@@ -74,6 +76,15 @@ namespace TallerCRUD.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Isbn,Titulo,Descripcion,NombreAutor,Publicacion,FechaRegistro,CodigoCategoria,NitEditorial")] Libro libro)
         {
+
+            if (_context.Libros.Any(l => l.Isbn == libro.Isbn))
+            {
+                // ISBN ya existe
+                TempData["ErrorMessage"] = "El ISBN ya existe. No se puede crear el libro.";
+                ViewData["CodigoCategoria"] = new SelectList(_context.Categorias, "CodigoCategoria", "CodigoCategoria", libro.CodigoCategoria);
+                ViewData["NitEditorial"] = new SelectList(_context.Editoriales, "Nit", "Nit", libro.NitEditorial);
+                return View(libro);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(libro);
@@ -98,6 +109,8 @@ namespace TallerCRUD.Controllers
             {
                 return NotFound();
             }
+            ViewData["CodigoCategoria"] = new SelectList(_context.Categorias, "CodigoCategoria", "CodigoCategoria");
+            ViewData["NitEditorial"] = new SelectList(_context.Editoriales, "Nit", "Nit");
             return View(libro);
         }
 
@@ -129,6 +142,8 @@ namespace TallerCRUD.Controllers
                         throw;
                     }
                 }
+                ViewData["CodigoCategoria"] = new SelectList(_context.Categorias, "CodigoCategoria", "CodigoCategoria");
+                ViewData["NitEditorial"] = new SelectList(_context.Editoriales, "Nit", "Nit");
                 return RedirectToAction(nameof(Index));
             }
             return View(libro);
@@ -158,13 +173,32 @@ namespace TallerCRUD.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var libro = await _context.Libros.FindAsync(id);
-            if (libro != null)
+            if (libro == null)
             {
-                _context.Libros.Remove(libro);
+                TempData["ErrorMessage"] = "Libro no encontrado.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Libros.Remove(libro);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_"))
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar el libro porque tiene autores asociados.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error al eliminar el libro.";
+                }
+                return RedirectToAction(nameof(Index));
+
+            }
+
         }
 
         private bool LibroExists(string id)

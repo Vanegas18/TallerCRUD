@@ -121,6 +121,18 @@
         })
     }
 
+        // Mostrar mensaje de error si existe
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '@TempData["ErrorMessage"]'
+        });
+        </text>
+    }
+
     // Inicializar DataTable con opciones personalizadas
     new DataTable('#example', {
         dom: '',

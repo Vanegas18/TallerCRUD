@@ -73,6 +73,21 @@ namespace TallerCRUD.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Nit,Nombres,Telefono,Direccion,Email,Sitioweb")] Editoriale editoriale)
         {
+            if (_context.Editoriales.Any(e => e.Nit == editoriale.Nit))
+            {
+                // NIT ya existe
+                TempData["ErrorMessage"] = "El NIT ya existe. No se puede crear la editorial.";
+                return View(editoriale);
+            }
+
+            if (_context.Editoriales.Any(e => e.Email == editoriale.Email))
+            {
+                // Email ya existe
+                TempData["ErrorMessage"] = "El correo electronico ya existe. No se puede crear la editorial.";
+                return View(editoriale);
+            }
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(editoriale);

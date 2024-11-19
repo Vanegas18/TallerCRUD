@@ -66,6 +66,13 @@ namespace TallerCRUD.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CodigoCategoria,Nombre")] Categoria categoria)
         {
+
+            if (_context.Categorias.Any(c => c.CodigoCategoria == categoria.CodigoCategoria))
+            {
+                // NIT ya existe
+                TempData["ErrorMessage"] = "El codigo de categoria ya existe. No se puede crear la categoria.";
+                return View(categoria);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(categoria);
