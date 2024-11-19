@@ -37,7 +37,7 @@
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" class="btn btn-secondary" asp-route-idAutor="@item.IdAutor" asp-route-isbn="@item.Isbn" style="margin-right: 5px;">Editar</a>
                     <a asp-action="Details" class="btn btn-info" asp-route-id="@item.IdAutor" asp-route-isbn="@item.Isbn" style="margin-right: 5px;">Detalles</a>
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-idAutor="@item.IdAutor" asp-route-isbn="@item.Isbn" style="margin-right: 5px;">Eliminar</a>
+                    <button type="button" class="btn btn-danger" style="margin-right: 5px;" onclick="confirmDelete('@item.IdAutor', '@item.Isbn')">Eliminar</button>
                 </div>
             </td>
         </tr>
@@ -45,7 +45,50 @@
     </tbody>
 </table>
 
+<!-- Formulario oculto para el token de verificación -->
+<form id="deleteForm" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function confirmDelete(idAutor, isbn) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Crear un formulario y enviarlo
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/Libro_autor/DeleteConfirmed';
+
+                var inputIdAutor = document.createElement('input');
+                inputIdAutor.type = 'hidden';
+                inputIdAutor.name = 'idAutor';
+                inputIdAutor.value = idAutor;
+                form.appendChild(inputIdAutor);
+
+                var inputIsbn = document.createElement('input');
+                inputIsbn.type = 'hidden';
+                inputIsbn.name = 'isbn';
+                inputIsbn.value = isbn;
+                form.appendChild(inputIsbn);
+
+                var token = document.querySelector('#deleteForm input[name="__RequestVerificationToken"]').cloneNode();
+                form.appendChild(token);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })
+    }
+
     // Inicializar DataTable con opciones personalizadas
     new DataTable('#example', {
         dom: '',

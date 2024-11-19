@@ -43,7 +43,11 @@
                     <div class="btn-group" role="group">
                         <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.CodigoCategoria" style="margin-right: 5px;">Editar</a>
                         <a asp-action="Details" class="btn btn-info" asp-route-id="@item.CodigoCategoria" style="margin-right: 5px;">Detalles</a>
-                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.CodigoCategoria" style="margin-right: 5px;">Eliminar</a>
+                        <form asp-action="DeleteConfirmed" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@item.CodigoCategoria" />
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete(this)">Eliminar</button>
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -52,6 +56,34 @@
 </table>
 
 <script>
+    // Función para confirmar eliminación de registro
+    function confirmDelete(button) {
+        Swal.fire({
+            title: '¿Está seguro de eliminar el registro?',
+            text: "¡No podrá revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                button.form.submit();
+            }
+        });
+    }
+
+    // Mostrar mensaje de error si existe
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '@TempData["ErrorMessage"]'
+        });
+        </text>
+    }
     // Inicializar DataTable con configuraciones personalizadas
     new DataTable('#example', {
         dom: '',

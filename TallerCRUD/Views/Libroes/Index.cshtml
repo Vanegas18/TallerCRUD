@@ -75,7 +75,7 @@
                 <div class="btn-group" role="group">
                     <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.Isbn" style="margin-right: 5px;">Editar</a>
                     <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Isbn" style="margin-right: 5px;">Detalles</a>
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Isbn" style="margin-right: 5px;">Eliminar</a>
+                    <button type="button" class="btn btn-danger" style="margin-right: 5px;" onclick="confirmDelete('@item.Isbn')">Eliminar</button>
                 </div>
             </td>
         </tr>
@@ -83,7 +83,45 @@
     </tbody>
 </table>
 
+<!-- Formulario oculto para el token de verificación -->
+<form id="deleteForm" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function confirmDelete(isbn) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Crear un formulario y enviarlo
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/Libroes/DeleteConfirmed';
+
+                var inputIsbn = document.createElement('input');
+                inputIsbn.type = 'hidden';
+                inputIsbn.name = 'id';
+                inputIsbn.value = isbn;
+                form.appendChild(inputIsbn);
+
+                var token = document.querySelector('#deleteForm input[name="__RequestVerificationToken"]').cloneNode(true);
+                form.appendChild(token);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })
+    }
+
+    // Inicializar DataTable con opciones personalizadas
     new DataTable('#example', {
         dom: '',
         language: {

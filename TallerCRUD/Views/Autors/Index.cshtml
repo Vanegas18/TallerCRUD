@@ -49,7 +49,7 @@
                     <div class="btn-group" role="group">
                         <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.IdAutor" style="margin-right: 5px;">Editar</a>
                         <a asp-action="Details" class="btn btn-info" asp-route-id="@item.IdAutor" style="margin-right: 5px;">Detalles</a>
-                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.IdAutor" style="margin-right: 5px;">Eliminar</a>
+                        <button type="button" class="btn btn-danger" style="margin-right: 5px;" onclick="confirmDelete('@item.IdAutor')">Eliminar</button>
                     </div>
                 </td>
             </tr>
@@ -57,7 +57,55 @@
     </tbody>
 </table>
 
+<!-- Formulario oculto para el token de verificación -->
+<form id="deleteForm" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
 <script>
+    // Función para confirmar eliminación
+    function confirmDelete(idAutor) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true, 
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Crear un formulario y enviarlo
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/Autors/DeleteConfirmed';
+
+                var inputIdAutor = document.createElement('input');
+                inputIdAutor.type = 'hidden';
+                inputIdAutor.name = 'id';
+                inputIdAutor.value = idAutor;
+                form.appendChild(inputIdAutor);
+
+                var token = document.querySelector('#deleteForm input[name="__RequestVerificationToken"]').cloneNode(true);
+                form.appendChild(token);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })
+    }
+
+        // Mostrar mensaje de error si existe
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '@TempData["ErrorMessage"]'
+        });
+        </text>
+    }
     // Inicializar DataTable con opciones personalizadas
     new DataTable('#example', {
         dom: '',

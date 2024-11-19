@@ -24,7 +24,7 @@ namespace TallerCRUD.Controllers
             var libros = from Libro in _context.Libros select Libro;
             ViewData["FiltroNombre"] = String.IsNullOrEmpty(filtrar) ? "NombreDescendente" : "";
             ViewData["FiltroPublicacion"] = filtrar == "FechaAscendente" ? "FechaDescendente" : "FechaAscendente";
-            switch(filtrar)
+            switch (filtrar)
             {
                 case "NombreDescendente":
                     libros = libros.OrderByDescending(libro => libro.Titulo);
@@ -52,8 +52,6 @@ namespace TallerCRUD.Controllers
             }
 
             var libro = await _context.Libros
-                .Include(l => l.CodigoCategoriaNavigation)
-                .Include(l => l.NitEditorialNavigation)
                 .FirstOrDefaultAsync(m => m.Isbn == id);
             if (libro == null)
             {
@@ -72,8 +70,6 @@ namespace TallerCRUD.Controllers
         }
 
         // POST: Libroes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Isbn,Titulo,Descripcion,NombreAutor,Publicacion,FechaRegistro,CodigoCategoria,NitEditorial")] Libro libro)
@@ -102,14 +98,10 @@ namespace TallerCRUD.Controllers
             {
                 return NotFound();
             }
-            ViewData["CodigoCategoria"] = new SelectList(_context.Categorias, "CodigoCategoria", "CodigoCategoria", libro.CodigoCategoria);
-            ViewData["NitEditorial"] = new SelectList(_context.Editoriales, "Nit", "Nit", libro.NitEditorial);
             return View(libro);
         }
 
         // POST: Libroes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Isbn,Titulo,Descripcion,NombreAutor,Publicacion,FechaRegistro,CodigoCategoria,NitEditorial")] Libro libro)
@@ -139,8 +131,6 @@ namespace TallerCRUD.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CodigoCategoria"] = new SelectList(_context.Categorias, "CodigoCategoria", "CodigoCategoria", libro.CodigoCategoria);
-            ViewData["NitEditorial"] = new SelectList(_context.Editoriales, "Nit", "Nit", libro.NitEditorial);
             return View(libro);
         }
 
@@ -153,8 +143,6 @@ namespace TallerCRUD.Controllers
             }
 
             var libro = await _context.Libros
-                .Include(l => l.CodigoCategoriaNavigation)
-                .Include(l => l.NitEditorialNavigation)
                 .FirstOrDefaultAsync(m => m.Isbn == id);
             if (libro == null)
             {
@@ -165,7 +153,7 @@ namespace TallerCRUD.Controllers
         }
 
         // POST: Libroes/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {

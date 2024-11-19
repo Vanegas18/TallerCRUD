@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Editoriales";
 }
-
 <h1>Editoriales</h1>
 
 <style>
@@ -11,6 +10,7 @@
         background-color: #e0e0e0;
     }
 </style>
+
 
 <p class="btn btn-primary">
     <a asp-action="Create" class="titulo">Crear nueva editorial</a>
@@ -63,7 +63,11 @@
                     <div class="btn-group" role="group">
                         <a asp-action="Edit" class="btn btn-secondary" asp-route-id="@item.Nit" style="margin-right: 5px;">Editar</a>
                         <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Nit" style="margin-right: 5px;">Detalles</a>
-                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Nit" style="margin-right: 5px;">Eliminar</a>
+                        <form asp-action="DeleteConfirmed" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@item.Nit" />
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete(this)">Eliminar</button>
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -72,6 +76,37 @@
 </table>
 
 <script>
+    // Función para confirmar la eliminación de un registro
+
+    
+    function confirmDelete(button) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                button.closest('form').submit();
+            }
+        });
+    }
+
+    // Mostrar mensaje de error si existe
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '@TempData["ErrorMessage"]'
+        });
+        </text>
+    }
     // Inicializar DataTable con configuraciones personalizadas
     new DataTable('#example', {
         dom: '',

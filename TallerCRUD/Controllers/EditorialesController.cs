@@ -152,18 +152,36 @@ namespace TallerCRUD.Controllers
         }
 
         // POST: Editoriales/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var editoriale = await _context.Editoriales.FindAsync(id);
-            if (editoriale != null)
+            if (editoriale == null)
             {
-                _context.Editoriales.Remove(editoriale);
+                TempData["ErrorMessage"] = "Editorial no encontrada.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Editoriales.Remove(editoriale);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_"))
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar la editorial porque tiene libros asociados";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar la editorial";
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private bool EditorialeExists(int id)

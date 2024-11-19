@@ -23,7 +23,7 @@ namespace TallerCRUD.Controllers
         {
             var autores = from Autor in _context.Autors select Autor;
             ViewData["FiltroNombre"] = String.IsNullOrEmpty(filtrar) ? "NombreDescendente" : "";
-            switch(filtrar)
+            switch (filtrar)
             {
                 case "NombreDescendente":
                     autores = autores.OrderByDescending(autor => autor.Nombre);
@@ -145,18 +145,36 @@ namespace TallerCRUD.Controllers
         }
 
         // POST: Autors/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var autor = await _context.Autors.FindAsync(id);
-            if (autor != null)
+            if (autor == null)
             {
-                _context.Autors.Remove(autor);
+                TempData["ErrorMessage"] = "Autor no encontrado.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Autors.Remove(autor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_"))
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar el autor porque tiene libros asociados.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error al eliminar el autor.";
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private bool AutorExists(int id)

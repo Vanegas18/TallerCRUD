@@ -145,18 +145,36 @@ namespace TallerCRUD.Controllers
         }
 
         // POST: Categorias/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria != null)
+            if (categoria == null)
             {
-                _context.Categorias.Remove(categoria);
+                TempData["ErrorMessage"] = "Categoria no encontrada.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Categorias.Remove(categoria);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("FK_"))
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar la categoria porque tiene libros asociados.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error al eliminar la categoría.";
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private bool CategoriaExists(int id)

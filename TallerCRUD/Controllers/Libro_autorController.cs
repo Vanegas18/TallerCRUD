@@ -89,8 +89,9 @@ namespace TallerCRUD.Controllers
             return View(libro_autor);
         }
         // GET: Libro_autor/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int? idAutor, string? isbn)
         {
             if (idAutor == null || isbn == null)
@@ -111,7 +112,7 @@ namespace TallerCRUD.Controllers
         }
 
         // POST: Libro_autor/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? idAutor, string? isbn)
         {
